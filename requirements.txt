@@ -1,0 +1,9 @@
+asgiref==3.11.1
+brotli==1.2.0
+Django==6.0.2
+gunicorn==25.0.3
+packaging==26.0
+python-dotenv==1.2.1
+sqlparse==0.5.5
+tzdata==2025.3
+whitenoise==6.11.0

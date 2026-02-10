@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/portal.css' %}">
+    <title>Enquetes</title>
+</head>
+<body>
+    <header>
+        <h1 class="titulo">Portal de Enquetes</h1>
+    </header>
+    <main>
+        {% if lista_questoes_recentes %}
+        <ul class="enquete">
+            {% for questao in lista_questoes_recentes %}
+            <li class="enquete-item"><a href="{% url 'enquetes:detalhe' questao.id %}">{{questao.descricao}}</a></li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>Nenhuma enquete disponível.</p>
+        {% endif %}
+    </main>
+    <footer class="rodape">
+        <p>&copy; 2025 Futuro Digital</p>
+    </footer>
+</body>
+</html>

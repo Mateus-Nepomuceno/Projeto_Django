@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+*$py.class
+
+media/
+staticfiles/
+
+.venv
+
+.vscode
+
+.env
