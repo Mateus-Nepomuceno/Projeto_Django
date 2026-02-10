@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from dotenv import load_dotenv
 from pathlib import Path
+import dj_database_url
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -126,4 +127,14 @@ if not DEBUG:
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
+}
+
+if not DEBUG:
+    default_db_url = os.environ.get('DJANGO_DB_URL', f'sqlite:///{BASE_DIR / "db.sqlite3"}')
+    DATABASES = {
+    'default': dj_database_url.config(
+        default=default_db_url,
+        conn_max_age=600,
+        ssl_require=True
+    )
 }
