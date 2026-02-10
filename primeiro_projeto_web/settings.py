@@ -124,17 +124,24 @@ STATIC_URL = 'static/'
 if not DEBUG:
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
     STORAGES = {
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    
 
 if not DEBUG:
     default_db_url = os.environ.get('DJANGO_DB_URL', f'sqlite:///{BASE_DIR / "db.sqlite3"}')
     DATABASES = {
-    'default': dj_database_url.config(
-        default=default_db_url,
-        conn_max_age=600,
-        ssl_require=True
-    )
-}
+        'default': dj_database_url.config(
+            default=default_db_url,
+            conn_max_age=600,
+            ssl_require=True
+        )
+    }
