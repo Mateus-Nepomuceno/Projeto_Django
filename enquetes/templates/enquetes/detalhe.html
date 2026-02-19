@@ -8,10 +8,45 @@
     <p><strong>{{ error_message }}</strong></p>
     {% endif %}
     {% for alternativa in questao.alternativa_set.all %}
-    <input type="radio" name="alternativa" id="alternativa{{ forloop.counter }}" value="{{ alternativa.id }}"/>
-    <label for="alternativa{{ forloop.counter }}">{{ alternativa.descricao }}</label><br>
+    <input
+      type="radio"
+      name="alternativa"
+      id="alternativa{{ forloop.counter }}"
+      value="{{ alternativa.id }}"
+    />
+    <label for="alternativa{{ forloop.counter }}"
+      >{{ alternativa.descricao }}</label
+    ><br />
     {% endfor %}
   </fieldset>
   <input type="submit" value="Votar" />
 </form>
+<hr class="my-5" />
+<div class="card border-primary">
+  <div class="card-header bg-primary text-white">
+    <strong>Administração: Adicionar Opção</strong>
+  </div>
+  <div class="card-body">
+    <form
+      action="{% url 'enquetes:nova_alternativa' questao.id %}"
+      method="post"
+    >
+      {% csrf_token %}
+      <div class="row g-2">
+        <div class="col-md-9">{{ form_alternativa.descricao }}</div>
+        <div class="col-md-3">
+          <button type="submit" class="btn btn-primary w-100">Adicionar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% if form.non_field_errors %}
+{% for error in form.non_field_errors %}
+<div class="alert alert-danger mt-2">{{ error }}</div>
+{% endfor %}
+{% endif %}
+<div class="mt-4">
+  <a href="{% url 'enquetes:index' %}" class="btn btn-outline-secondary">Voltar para a Lista</a>
+</div>
 {% endblock %}

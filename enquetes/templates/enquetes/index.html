@@ -11,4 +11,5 @@
     {% else %}
         <p>Nenhuma enquete disponível ainda.</p>
     {% endif %}
+    <a href="{% url 'enquetes:nova_enquete' %}" class="btn btn-primary mt-5">+ Criar Nova Enquete</a>
 {% endblock %}
