@@ -1,6 +1,8 @@
+from django.db.models import F
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponse
-from .models import Questao
+from django.urls import reverse
+from .models import Questao, Alternativa
 
 # Create your views here.
 
@@ -13,9 +15,22 @@ def detalhe(request, questao_id):
     questao = get_object_or_404(Questao, pk=questao_id)
     return render(request, "enquetes/detalhe.html", {"questao": questao})
 
-def voto(request, questao_id) :
-    return HttpResponse(f"Você está votando na Pergunta {questao_id}")
+def voto(request, questao_id):
+    questao = get_object_or_404(Questao, pk=questao_id)
+    try:
+        selecionada = questao.alternativa_set.get(pk=request.POST['alternativa'])
+    except (KeyError, Alternativa.DoesNotExist):
+        return render(
+            request, 'enquetes/detalhes.html', {
+            'questao': questao,
+            'error_message': "Você não selecionou uma opção válida.",
+        })
+    else:
+        selecionada.votos = F('votos') + 1
+        selecionada.save()
+    
+        return HttpResponseRedirect(reverse('enquetes:resultados', args=(questao.id,)))
 
-def resultados(request, questao_id) :
-    response = f"Você está vendos os resultados da Pergunta {questao_id}"
-    return HttpResponse(response)
+def resultados(request, questao_id):
+ questao = get_object_or_404(Questao, pk=questao_id)
+ return render(request, 'enquetes/resultados.html', {'questao': questao})
