@@ -8,19 +8,22 @@
     <p><strong>{{ error_message }}</strong></p>
     {% endif %}
     {% for alternativa in questao.alternativa_set.all %}
-    <input
-      type="radio"
-      name="alternativa"
-      id="alternativa{{ forloop.counter }}"
-      value="{{ alternativa.id }}"
-    />
-    <label for="alternativa{{ forloop.counter }}"
-      >{{ alternativa.descricao }}</label
-    ><br />
+        <input type="radio" class="form-check-input" name="alternativa" id="alternativa{{ forloop.counter }}" value="{{ alternativa.id }}" />
+        <label class="form-check-label" for="alternativa{{ forloop.counter }}">{{ alternativa.descricao }}</label>
+          <button type="submit" form="form_excluir_alternativa_{{ alternativa.id }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Tem certeza que deseja excluir esta alternativa?')"><i class="bi bi-trash3"></i></button>
+          <a href="{% url 'enquetes:editar_alternativa' alternativa.id %}" class="btn btn-sm btn-outline-warning"><i class="bi bi-pencil-square"></i> Editar</a>
+        <br>
     {% endfor %}
   </fieldset>
   <input type="submit" value="Votar" />
 </form>
+
+{% for alternativa in questao.alternativa_set.all %}
+    <form id="form_excluir_alternativa_{{ alternativa.id }}" action="{% url 'enquetes:excluir_alternativa' alternativa.id %}" method="post" style="display:none;">
+      {% csrf_token %}
+    </form>
+{% endfor %}
+
 <hr class="my-5" />
 <div class="card border-primary">
   <div class="card-header bg-primary text-white">

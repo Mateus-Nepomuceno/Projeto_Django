@@ -72,3 +72,27 @@ def nova_alternativa(request, questao_id):
             form.add_error(None, f"Ocorreu um erro inesperado. {e}")
 
     return redirect('enquetes:detalhe', questao_id=questao.id)
+
+def excluir_alternativa(request, alternativa_id):
+    alternativa = get_object_or_404(Alternativa, pk=alternativa_id)
+    questao_id = alternativa.questao.id
+    
+    if request.method == "POST":
+        alternativa.delete()
+        
+    return redirect('enquetes:detalhe', questao_id=questao_id)
+
+def editar_alternativa(request, alternativa_id):
+    alternativa = get_object_or_404(Alternativa, pk=alternativa_id)
+    questao = alternativa.questao
+    
+    if request.method == "POST":
+        form_alternativa = AlternativaForm(request.POST, instance=alternativa)
+        if form_alternativa.is_valid():
+            form_alternativa.save()
+            return redirect('enquetes:detalhe', questao_id=questao.id)
+    else:
+        form_alternativa = AlternativaForm(instance=alternativa)
+    
+    contexto = {'form_alternativa': form_alternativa,'alternativa': alternativa}
+    return render(request, 'enquetes/editar_alternativa.html', contexto)
